@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import {GraphQLClient,gql} from 'graphql-request'
+import BlogCard from '../components/BlogCard'
 
 const gaphcms =new GraphQLClient(
    "https://api-ap-south-1.hygraph.com/v2/cl75u6z1j5kcu01ujb6go8o02/master"
@@ -15,21 +16,20 @@ const QUERY = gql`
       slug,
       content{
         html
-      }
-      author{
+      },
+     
+
+       author{
         name,
         avatar{
           url
         }
       }
 
+
+
       coverPhoto{
-        publishedAt{
-          createdBy{
-            id
-          }
-          url
-        }
+        url
       }
 
 
@@ -51,7 +51,7 @@ export async function getStaticProps(){
 
 
 
-export default function Home() {
+export default function Home({posts}) {
   return (
     <div className={styles.container}>
       <Head>
@@ -63,6 +63,12 @@ export default function Home() {
       <main className={styles.main}>
        
 
+      {
+        posts.map(post=>(
+
+          <BlogCard title={post.title} author={post.author} coverPhoto={post.coverPhoto} key={post.id} datePublished={post.datePublished} slug={post.slug} />
+        ))
+      }
 
 
 
